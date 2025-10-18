@@ -91,23 +91,53 @@
   <div class="table-wrapper-lar">
 
   <!-- Peso Estimado Chumlea 1992 -->
-  <h4>Peso Estimado (Chumlea 1992)</h4>
-  <form class="formula" id="pesoChumleaForm">
-    <label>Sexo:
-      <select name="sexo">
-        <option value="mulher">Mulher</option>
-        <option value="homem">Homem</option>
-      </select>
-    </label>
-    <label>Idade (anos):
-      <input type="number" name="idade" required>
-    </label>
-    <label>Altura (cm):
-      <input type="number" name="altura" required>
-    </label>
-    <button type="button" onclick="calcularPesoChumlea()">Calcular</button>
-    <span>Resultado: <strong id="resultadoPesoChumlea">-</strong> kg</span>
-  </form>
+  <!-- Peso Estimado Chumlea 1985 -->
+<h4>Peso Estimado (Chumlea 1985)</h4>
+<form class="formula" id="pesoChumleaForm">
+  <label>Sexo:
+    <select name="sexo" required>
+      <option value="mulher">Mulher</option>
+      <option value="homem">Homem</option>
+    </select>
+  </label>
+
+  <label>Raça:
+    <select name="raca" required>
+      <option value="branca">Branca</option>
+      <option value="negra">Negra</option>
+    </select>
+  </label>
+
+  <label>Altura do joelho (cm):
+    <input type="number" name="aj" step="0.1" required>
+  </label>
+
+  <label>Circunferência do braço (cm):
+    <input type="number" name="cb" step="0.1" required>
+  </label>
+
+  <button type="button" onclick="calcularPesoChumlea()">Calcular</button>
+  <span>Resultado: <strong id="resultadoPesoChumlea">-</strong> kg</span>
+</form>
+
+ <!-- Chumlea et al., 1994 -->
+  <!-- Altura Estimada (Chumlea et al. 1994) -->
+<h4>Altura Estimada (Chumlea et al. 1994)</h4>
+<form class="formula" id="chumlea1994Form">
+  <label>Raça:
+    <select name="raca" required>
+      <option value="branca">Branca</option>
+      <option value="negra">Negra</option>
+    </select>
+  </label>
+
+  <label>Altura do joelho (cm):
+    <input type="number" name="aj" step="0.1" required>
+  </label>
+
+  <button type="button" onclick="calcularChumlea1994()">Calcular</button>
+  <span>Resultado: <strong id="resultadoChumlea1994">-</strong> cm</span>
+</form>
 
   <!-- IMC -->
   <h4>IMC</h4>
@@ -123,45 +153,35 @@
   </form>
 
   <!-- TMB Harris-Benedict -->
-  <h4>TMB (Harris-Benedict)</h4>
-  <form class="formula" id="tmbForm">
-    <label>Sexo:
-      <select name="sexo">
-        <option value="mulher">Mulher</option>
-        <option value="homem">Homem</option>
-      </select>
-    </label>
-    <label>Peso (kg):
-      <input type="number" name="peso" required>
-    </label>
-    <label>Altura (cm):
-      <input type="number" name="altura" required>
-    </label>
-    <label>Idade (anos):
-      <input type="number" name="idade" required>
-    </label>
-    <button type="button" onclick="calcularTMB()">Calcular</button>
-    <span>Resultado: <strong id="resultadoTMB">-</strong> kcal/dia</span>
-  </form>
+  <!-- TMB (Harris-Benedict 1919) -->
+<h4>TMB (Harris-Benedict)</h4>
+<form class="formula" id="tmbForm">
+  <label>Sexo:
+    <select name="sexo" required>
+      <option value="mulher">Mulher</option>
+      <option value="homem">Homem</option>
+    </select>
+  </label>
 
-  <!-- Chumlea et al., 1994 -->
-  <h4>Chumlea et al. 1994</h4>
-  <form class="formula" id="chumlea1994Form">
-    <label>Sexo:
-      <select name="sexo">
-        <option value="mulher">Mulher</option>
-        <option value="homem">Homem</option>
-      </select>
-    </label>
-    <label>Idade (anos):
-      <input type="number" name="idade" required>
-    </label>
-    <label>Altura (cm):
-      <input type="number" name="altura" required>
-    </label>
-    <button type="button" onclick="calcularChumlea1994()">Calcular</button>
-    <span>Resultado: <strong id="resultadoChumlea1994">-</strong> kg</span>
-  </form>
+  <label>Peso (kg):
+    <input type="number" name="peso" step="0.1" required>
+  </label>
+
+  <label>Altura (cm):
+    <input type="number" name="altura" step="0.1" required>
+  </label>
+
+  <label>Idade (anos):
+    <input type="number" name="idade" required>
+  </label>
+
+  <button type="button" onclick="calcularTMB()">Calcular</button>
+  <span>Resultado: <strong id="resultadoTMB">-</strong> kcal/dia</span>
+</form>
+
+
+ 
+
 </div>
 </div>
 
@@ -169,17 +189,28 @@
 function calcularPesoChumlea() {
   const form = document.getElementById("pesoChumleaForm");
   const sexo = form.sexo.value;
-  const idade = parseFloat(form.idade.value);
-  const altura = parseFloat(form.altura.value);
+  const raca = form.raca.value;
+  const AJ = parseFloat(form.aj.value);
+  const CB = parseFloat(form.cb.value);
   let resultado = 0;
 
-  if(sexo === "mulher") {
-    resultado = 0.98 * altura - 0.05 * idade - 76.7;
-  } else {
-    resultado = 1.00 * altura - 0.05 * idade - 78.0;
+  if (sexo === "mulher" && raca === "negra") {
+    // Mulher Negra (60–80 anos)
+    resultado = AJ * 1.50 + CB * 2.58 - 84.22;
+  } else if (sexo === "mulher" && raca === "branca") {
+    // Mulher Branca (60–80 anos)
+    resultado = AJ * 1.09 + CB * 2.68 - 65.51;
+  } else if (sexo === "homem" && raca === "negra") {
+    // Homem Negro (60–80 anos)
+    resultado = AJ * 0.44 + CB * 2.86 - 39.21;
+  } else if (sexo === "homem" && raca === "branca") {
+    // Homem Branco (60–80 anos)
+    resultado = AJ * 1.10 + CB * 3.07 - 75.81;
   }
+
   document.getElementById("resultadoPesoChumlea").innerText = resultado.toFixed(2);
 }
+
 
 function calcularIMC() {
   const form = document.getElementById("imcForm");
@@ -196,29 +227,48 @@ function calcularTMB() {
   const altura = parseFloat(form.altura.value);
   const idade = parseFloat(form.idade.value);
 
-  let tmb = 0;
-  if(sexo === "mulher") {
-    tmb = 655.1 + (9.563 * peso) + (1.85 * altura) - (4.676 * idade);
-  } else {
-    tmb = 66.47 + (13.75 * peso) + (5 * altura) - (6.75 * idade);
+  if (isNaN(peso) || isNaN(altura) || isNaN(idade)) {
+    alert("Preencha todos os campos corretamente!");
+    return;
   }
+
+  let tmb = 0;
+
+  if (sexo === "homem") {
+    // Fórmula Harris-Benedict (Homem)
+    tmb = 66 + (13.7 * peso) + (5 * altura) - (6.8 * idade);
+  } else if (sexo === "mulher") {
+    // Fórmula Harris-Benedict (Mulher)
+    tmb = 655 + (9.6 * peso) + (1.8 * altura) - (4.7 * idade);
+  }
+
   document.getElementById("resultadoTMB").innerText = tmb.toFixed(2);
 }
 
+
 function calcularChumlea1994() {
   const form = document.getElementById("chumlea1994Form");
-  const sexo = form.sexo.value;
-  const idade = parseFloat(form.idade.value);
-  const altura = parseFloat(form.altura.value);
+  const raca = form.raca.value;
+  const AJ = parseFloat(form.aj.value);
+
+  if (isNaN(AJ)) {
+    alert("Informe a altura do joelho corretamente!");
+    return;
+  }
+
   let resultado = 0;
 
-  if(sexo === "mulher") {
-    resultado = 0.413 * altura + 0.229 * idade - 16.2;
-  } else {
-    resultado = 0.401 * altura + 0.267 * idade - 19.2;
+  if (raca === "negra") {
+    // Negros
+    resultado = 73.42 + (1.79 * AJ);
+  } else if (raca === "branca") {
+    // Brancos
+    resultado = 71.85 + (1.88 * AJ);
   }
+
   document.getElementById("resultadoChumlea1994").innerText = resultado.toFixed(2);
 }
+
 </script>
 
 {% endblock %}
