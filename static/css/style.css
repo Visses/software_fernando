@@ -1,0 +1,661 @@
+:root {
+  --bg: #f4f6f8;
+  --card: #f5e9ed;
+  --muted: #9aa3ad;
+  --accent: #bb8191;
+  --shadow: 0 6px 20px rgba(20,30,40,0.06);
+  --radius: 18px;
+  --sidebar-w: 260px;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+
+* { box-sizing: border-box; }
+html, body, #app { height: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: #0f1720;
+  -webkit-font-smoothing: antialiased;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+a {
+  text-decoration: none;
+}
+
+.app { display: flex; min-height: 100vh; }
+
+/* SIDEBAR */
+/* Sidebar scroll */
+.sidebar {
+  width: var(--sidebar-w);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Ocupa toda a altura da tela */
+}
+
+.sidebar-card {
+  width: 100%;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 22px;
+  overflow-y: auto; /* Permite scroll vertical */
+  max-height: calc(100vh - 56px); /* Ajusta altura considerando padding superior/inferior */
+}
+
+/* Scrollbar estilizada */
+.sidebar-card::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar-card::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.03);
+  border-radius: 3px;
+}
+
+.sidebar-card::-webkit-scrollbar-thumb {
+  background-color: #bb8191;
+  border-radius: 3px;
+}
+
+
+.section { margin-bottom: 18px; }
+.section-title {
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin: 0 0 10px 4px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+.menu { list-style: none; padding: 0; margin: 0; }
+.menu-item {
+  padding: 10px 12px;
+  border-radius: 10px;
+  margin: 6px 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: all .18s ease;
+  color: #111827;
+  font-weight: 500;
+  font-size: 15px;
+}
+.menu-item:hover { background: rgba(0,0,0,0.03); transform: translateY(-1px); }
+.menu-item.active {
+  background: rgba(0,174,254,0.08);
+  box-shadow: 0 6px 18px rgba(0,174,254,0.06);
+}
+
+/* Custom Select */
+.custom-select {
+  position: relative;
+  border-radius: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  border: 1px solid rgba(15,23,36,0.04);
+}
+.select-label { font-weight: 600; }
+.select-options {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 6px);
+  background: var(--card);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 8px;
+  list-style: none;
+  margin: 0;
+  display: none;
+}
+.select-options .option {
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+.select-options .option:hover { background: rgba(0,0,0,0.03); }
+.custom-select.open .select-options { display: block; }
+
+/* CONTENT */
+.content { flex: 1; padding: 28px; }
+.topbar { display: flex; align-items: center; gap: 18px; }
+.btn-hamburger {
+  display: none;
+  background: transparent;
+  border: 0;
+  font-size: 20px;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+
+
+/* Container para scroll das tabelas */
+.table-wrapper {
+  max-height: 100px; /* altura máxima da tabela antes de scroll */
+  overflow-y: auto;  /* scroll vertical */
+  overflow-x: auto;  /* scroll horizontal se necessário */
+  margin-bottom: 25px;
+}
+
+/* Mantém bordas arredondadas na tabela dentro do scroll */
+.table-wrapper table {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Scrollbar estilizada */
+.table-wrapper::-webkit-scrollbar {
+  width: 6px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 3px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  background-color: #bb8191;
+  border-radius: 3px;
+}
+
+
+
+
+
+
+
+
+/* Container para scroll das tabelas */
+.table-wrapper-lar {
+  max-height: 500px; /* altura máxima da tabela antes de scroll */
+  overflow-y: auto;  /* scroll vertical */
+  overflow-x: auto;  /* scroll horizontal se necessário */
+  margin-bottom: 25px;
+}
+
+/* Mantém bordas arredondadas na tabela dentro do scroll */
+.table-wrapper-lar table {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Scrollbar estilizada */
+.table-wrapper-lar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.table-wrapper-lar::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 3px;
+}
+
+.table-wrapper-lar::-webkit-scrollbar-thumb {
+  background-color: #bb8191;
+  border-radius: 3px;
+}
+
+/* Responsivo */
+@media (max-width: 900px) {
+  .sidebar { position: fixed; left: 16px; top: 16px; z-index: 50; }
+  .btn-hamburger { display: inline-block; }
+  .sidebar.hidden { transform: translateX(-120%); }
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(5,8,12,0.35);
+    z-index: 40;
+    display: none;
+  }
+  .overlay.show { display: block; }
+}
+
+
+
+
+
+
+
+/* Estilo geral da scrollbar (funciona no Chrome, Edge e Safari) */
+::-webkit-scrollbar {
+  width: 8px;              /* largura da barra vertical */
+  height: 8px;             /* altura da barra horizontal */
+}
+
+::-webkit-scrollbar-track {
+  background: #f0f0f0;      /* cor de fundo da trilha */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #bb8191, #bb8191); /* degrade azul */
+  border-radius: 10px;
+  transition: background 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #bb8191, #bb8191);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;                  /* torna a barra mais fina */
+  scrollbar-color: #89ba90 #f0f0f0;      /* cor do thumb e do track */
+}
+
+
+
+
+.titulo-hospedes {
+  text-align: center;
+  font-size: 40px;
+  font-weight: 700;
+  color: #720f29;
+  margin: 15px 0; /* distância ajustada abaixo dos contadores */
+  letter-spacing: 1px;
+ 
+}
+
+.container-dashboard {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  height: auto;
+  font-family: 'Inter', sans-serif;
+  align-items: flex-start;
+}
+
+/* === LADO ESQUERDO === */
+.coluna-esquerda {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Contadores */
+.contadores {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.card-contador {
+  background: linear-gradient(135deg, #89ba90, #89ba90);
+  color: #fff;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.card-contador:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+.card-contador.total {
+  background: linear-gradient(135deg, #bb8191, #bb8191);
+}
+
+/* Campo de busca centralizado abaixo dos contadores */
+.busca-hospede {
+  width: 60%;
+  margin: 10px auto 5px auto; /* centraliza e reduz espaço */
+  text-align: center;
+}
+.busca-hospede input {
+  width: 100%;
+  padding: 10px 15px;
+  border-radius: 50px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 16px;
+  transition: box-shadow 0.2s;
+}
+.busca-hospede input:focus {
+  box-shadow: 0 0 10px #89ba90;
+  border-color: #89ba90;
+}
+
+
+
+/* Tabela */
+.tabela-hospedes {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 5px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.tabela-hospedes th,
+.tabela-hospedes td {
+  padding: 12px;
+  text-align: left;
+  text-transform: uppercase;
+}
+.tabela-hospedes th {
+  background-color: #89ba90;
+  color: #fff;
+  font-weight: 600;
+}
+.tabela-hospedes tr:nth-child(even) {
+  background-color: #f5f5f5;
+}
+.tabela-hospedes tr:hover {
+  background-color: #e0f7ff;
+}
+
+/* Botão da ficha */
+.btn-ficha {
+  background-color: #89ba90;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: 0.2s;
+}
+.btn-ficha:hover {
+  background-color: #720f29;
+}
+
+/* === FORMULÁRIO DIREITA === */
+.form-direita {
+  width: 400px;
+  background-color: #f5e9ed;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  max-height: 90vh;
+  overflow-y: auto;
+  position: sticky;
+  top: 10px;
+}
+.form-direita h2 {
+  margin-bottom: 20px;
+  color: #720f29;
+}
+
+.form-direita form label {
+  display: block;
+  margin-top: 10px;
+  font-weight: 500;
+}
+.form-direita form input,
+.form-direita form select,
+.form-direita form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 3px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.form-direita form input:focus,
+.form-direita form select:focus,
+.form-direita form textarea:focus {
+  border-color: #89ba90;
+  box-shadow: 0 0 10px 
+#89ba90;
+}
+.form-direita form button {
+  margin-top: 15px;
+  width: 100%;
+  padding: 12px;
+  background-color: 
+#89ba90;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.form-direita form button:hover {
+  background-color: #720f29;
+}
+
+.tabela-container {
+  flex: 1;
+  max-height: 400px;
+  overflow-y: auto;
+  margin-top: 10px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Scroll bonito */
+.tabela-container::-webkit-scrollbar {
+  width: 8px;
+}
+.tabela-container::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 10px;
+}
+.tabela-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #89ba90, #89ba90);
+  border-radius: 10px;
+}
+.tabela-container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #89ba90, #89ba90);
+}
+
+/* Firefox */
+.tabela-container {
+  scrollbar-width: thin;
+  scrollbar-color: #89ba90 #f0f0f0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.ficha-container {
+  max-width: 900px;
+  margin: 30px auto;
+  background: #fff;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.ficha-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 30px;
+  border-bottom: 3px solid #720f29;
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+}
+
+.foto-hospede {
+  text-align: center;
+}
+.foto-hospede img {
+  width: 150px;
+  height: 150px;
+  border-radius: 15px;
+  object-fit: cover;
+  border: 3px solid #720f29;
+}
+.foto-hospede input {
+  margin-top: 10px;
+  width: 100%;
+  font-size: 14px;
+}
+
+.dados-header h2 {
+  font-size: 28px;
+  color: #720f29;
+  margin-bottom: 5px;
+}
+.dados-header p {
+  margin: 3px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.ficha-form h3 {
+  color: #720f29;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.ficha-form label {
+  font-weight: 600;
+  display: block;
+  margin-top: 10px;
+}
+
+.ficha-form input,
+.ficha-form select,
+.ficha-form textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  outline: none;
+  transition: all 0.2s;
+  margin-bottom: 10px;
+}
+.ficha-form input:focus,
+.ficha-form select:focus,
+.ficha-form textarea:focus {
+  border-color: #720f29;
+  box-shadow: 0 0 10px #720f29;
+}
+
+.ficha-form textarea {
+  min-height: 100px;
+}
+
+.grupo {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.btn-salvar {
+  width: 100%;
+  background: linear-gradient(135deg, #89ba90, #89ba90);
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: 0.2s;
+}
+.btn-salvar:hover {
+  background: linear-gradient(135deg, #89ba90, #89ba90);
+}
+
+.btn-excluir {
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px;
+  background: #e53935;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.btn-excluir:hover {
+  background: #e90000;
+}
+
+
+
+
+
+
+#loadingOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #f5e9ed;
+  backdrop-filter: blur(4px);
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.3s ease;
+}
+
+#loadingOverlay p {
+  text-align: center;
+  font-size: 1rem;
+  color: #333;
+  font-weight: 500;
+  margin-top: 15px;
+  line-height: 1.4;
+}
+#loadingOverlay strong {
+  color: #041079;
+  font-weight: 700;
+}
+
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid #ccc;
+  border-top-color: 
+#89ba90;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

@@ -1,0 +1,224 @@
+{% extends "index.html" %}
+
+{% block title %}Nutrição{% endblock %}
+
+{% block content %}
+<style>.nutricao {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f5e9ed;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  font-family: 'Inter', sans-serif;
+}
+
+.nutricao h3 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #720f29
+
+;
+}
+
+.nutricao h4 {
+  margin-top: 25px;
+  margin-bottom: 10px;
+  color: #333;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px;
+}
+
+.formula {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 15px;
+  align-items: center;
+}
+
+.formula label {
+  flex: 1 1 150px;
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  color: #333;
+}
+
+.formula input, .formula select {
+  padding: 6px 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.formula button {
+  background-color: 
+#89ba90
+
+;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.formula button:hover {
+  background-color: #720f29
+
+;
+}
+
+.formula span {
+  flex: 1 1 100%;
+  margin-top: 5px;
+  font-weight: 600;
+  color: #333;
+}
+
+.formula strong {
+  color: #720f29
+
+;
+}
+</style>
+
+<div class="nutricao">
+  <h3>Calculadora Nutricional</h3>
+  <div class="table-wrapper-lar">
+
+  <!-- Peso Estimado Chumlea 1992 -->
+  <h4>Peso Estimado (Chumlea 1992)</h4>
+  <form class="formula" id="pesoChumleaForm">
+    <label>Sexo:
+      <select name="sexo">
+        <option value="mulher">Mulher</option>
+        <option value="homem">Homem</option>
+      </select>
+    </label>
+    <label>Idade (anos):
+      <input type="number" name="idade" required>
+    </label>
+    <label>Altura (cm):
+      <input type="number" name="altura" required>
+    </label>
+    <button type="button" onclick="calcularPesoChumlea()">Calcular</button>
+    <span>Resultado: <strong id="resultadoPesoChumlea">-</strong> kg</span>
+  </form>
+
+  <!-- IMC -->
+  <h4>IMC</h4>
+  <form class="formula" id="imcForm">
+    <label>Peso (kg):
+      <input type="number" name="peso" required>
+    </label>
+    <label>Altura (m):
+      <input type="number" step="0.01" name="altura" required>
+    </label>
+    <button type="button" onclick="calcularIMC()">Calcular</button>
+    <span>Resultado: <strong id="resultadoIMC">-</strong></span>
+  </form>
+
+  <!-- TMB Harris-Benedict -->
+  <h4>TMB (Harris-Benedict)</h4>
+  <form class="formula" id="tmbForm">
+    <label>Sexo:
+      <select name="sexo">
+        <option value="mulher">Mulher</option>
+        <option value="homem">Homem</option>
+      </select>
+    </label>
+    <label>Peso (kg):
+      <input type="number" name="peso" required>
+    </label>
+    <label>Altura (cm):
+      <input type="number" name="altura" required>
+    </label>
+    <label>Idade (anos):
+      <input type="number" name="idade" required>
+    </label>
+    <button type="button" onclick="calcularTMB()">Calcular</button>
+    <span>Resultado: <strong id="resultadoTMB">-</strong> kcal/dia</span>
+  </form>
+
+  <!-- Chumlea et al., 1994 -->
+  <h4>Chumlea et al. 1994</h4>
+  <form class="formula" id="chumlea1994Form">
+    <label>Sexo:
+      <select name="sexo">
+        <option value="mulher">Mulher</option>
+        <option value="homem">Homem</option>
+      </select>
+    </label>
+    <label>Idade (anos):
+      <input type="number" name="idade" required>
+    </label>
+    <label>Altura (cm):
+      <input type="number" name="altura" required>
+    </label>
+    <button type="button" onclick="calcularChumlea1994()">Calcular</button>
+    <span>Resultado: <strong id="resultadoChumlea1994">-</strong> kg</span>
+  </form>
+</div>
+</div>
+
+<script>
+function calcularPesoChumlea() {
+  const form = document.getElementById("pesoChumleaForm");
+  const sexo = form.sexo.value;
+  const idade = parseFloat(form.idade.value);
+  const altura = parseFloat(form.altura.value);
+  let resultado = 0;
+
+  if(sexo === "mulher") {
+    resultado = 0.98 * altura - 0.05 * idade - 76.7;
+  } else {
+    resultado = 1.00 * altura - 0.05 * idade - 78.0;
+  }
+  document.getElementById("resultadoPesoChumlea").innerText = resultado.toFixed(2);
+}
+
+function calcularIMC() {
+  const form = document.getElementById("imcForm");
+  const peso = parseFloat(form.peso.value);
+  const altura = parseFloat(form.altura.value);
+  const imc = peso / (altura * altura);
+  document.getElementById("resultadoIMC").innerText = imc.toFixed(2);
+}
+
+function calcularTMB() {
+  const form = document.getElementById("tmbForm");
+  const sexo = form.sexo.value;
+  const peso = parseFloat(form.peso.value);
+  const altura = parseFloat(form.altura.value);
+  const idade = parseFloat(form.idade.value);
+
+  let tmb = 0;
+  if(sexo === "mulher") {
+    tmb = 655.1 + (9.563 * peso) + (1.85 * altura) - (4.676 * idade);
+  } else {
+    tmb = 66.47 + (13.75 * peso) + (5 * altura) - (6.75 * idade);
+  }
+  document.getElementById("resultadoTMB").innerText = tmb.toFixed(2);
+}
+
+function calcularChumlea1994() {
+  const form = document.getElementById("chumlea1994Form");
+  const sexo = form.sexo.value;
+  const idade = parseFloat(form.idade.value);
+  const altura = parseFloat(form.altura.value);
+  let resultado = 0;
+
+  if(sexo === "mulher") {
+    resultado = 0.413 * altura + 0.229 * idade - 16.2;
+  } else {
+    resultado = 0.401 * altura + 0.267 * idade - 19.2;
+  }
+  document.getElementById("resultadoChumlea1994").innerText = resultado.toFixed(2);
+}
+</script>
+
+{% endblock %}

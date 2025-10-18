@@ -1,0 +1,155 @@
+{% extends "index.html" %}
+
+{% block title %}
+Estoque Remédios
+{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="/static/css/estoque.css">
+<div class="controle-estoque">
+  <h3>Controle de Remédios Diários</h3>
+
+  <!-- Média mensal -->
+  <h4>Média Mensal de Remédios Usados</h4>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Mês</th>
+          <th>Total Usado</th>
+          <th>Total Estoque</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for m in media_mensal %}
+          <tr>
+            <td>{{ m.mes }}</td>
+            <td>{{ m.total_usado }}</td>
+            <td>{{ total_estoque }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Formulário -->
+  <form id="formRemedios">
+    <input type="text" name="nome" placeholder="Nome do remédio" required>
+    <input type="number" name="quantidade" placeholder="Quantidade" required>
+    <button type="submit">Cadastrar</button>
+  </form>
+
+  <!-- Estoque -->
+  <h4>Estoque Atual</h4>
+  <div class="table-wrapper">
+    <table id="tabelaEstoque">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Quantidade</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in remedios %}
+          <tr>
+            <td>{{ r.nome }}</td>
+            <td>{{ r.quantidade }}</td>
+            <td>
+              <button onclick="alterarQuantidade({{ r.id }}, 'aumentar')">+</button>
+              <button onclick="alterarQuantidade({{ r.id }}, 'reduzir')">-</button>
+              <button onclick="excluirRemedio({{ r.id }})">Excluir</button>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Log -->
+  <h4>Histórico de Alterações</h4>
+  <div class="table-wrapper">
+    <table id="tabelaLog">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Ação</th>
+          <th>Quantidade</th>
+          <th>Data/Hora</th>
+          <th>Excluir</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for l in log %}
+          <tr>
+            <td>{{ l.nome }}</td>
+            <td>{{ l.acao }}</td>
+            <td>{{ l.quantidade }}</td>
+            <td>{{ l.data_hora }}</td>
+            <td><button onclick="excluirLog({{ l.id }})">🗑</button></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  // Cadastro
+  document.getElementById("formRemedios").addEventListener("submit", async function(e){
+    e.preventDefault();
+    let nome = this.nome.value;
+    let quantidade = parseInt(this.quantidade.value);
+    const res = await fetch("/cadastrar_remedio", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({nome, quantidade})
+    });
+    const data = await res.json();
+    if(data.success) location.reload();
+    else alert("Erro ao cadastrar!");
+  });
+});
+
+// Alterar quantidade
+async function alterarQuantidade(id, acao) {
+  let valor = prompt(`Digite a quantidade para ${acao}:`);
+  if (!valor || isNaN(valor)) return alert("Valor inválido");
+  const res = await fetch("/alterar_estoque_remedio", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({id, acao, quantidade: parseInt(valor)})
+  });
+  const data = await res.json();
+  if (data.success) location.reload();
+}
+
+// Excluir remédio
+async function excluirRemedio(id) {
+  if (!confirm("Deseja realmente excluir este remédio?")) return;
+  const res = await fetch("/excluir_remedio", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({id})
+  });
+  const data = await res.json();
+  if (data.success) location.reload();
+}
+
+// Excluir log com senha
+async function excluirLog(id) {
+  const senha = prompt("Digite a senha para excluir o log:");
+  const res = await fetch("/excluir_log_remedio", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({id, senha})
+  });
+  const data = await res.json();
+  if (data.success) location.reload();
+  else alert(data.message);
+}
+</script>
+
+{% endblock %}

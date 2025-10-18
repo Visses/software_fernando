@@ -1,0 +1,156 @@
+{% extends "index.html" %}
+
+{% block title %}
+Estoque Produtos de Limpeza
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="/static/css/estoque.css">
+<div class="controle-estoque">
+  <h3>Controle de Produtos de Limpeza</h3>
+
+  <!-- Média mensal -->
+  <h4>Média Mensal de Itens Usados</h4>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Mês</th>
+          <th>Total Usado</th>
+          <th>Total Estoque</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for m in media_mensal %}
+          <tr>
+            <td>{{ m.mes }}</td>
+            <td>{{ m.total_usado }}</td>
+            <td>{{ total_estoque }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Formulário de cadastro -->
+  <form id="formLimpeza">
+    <input type="text" name="nome" placeholder="Nome do Produto" required>
+    <input type="number" name="quantidade" placeholder="Quantidade" required>
+    <button type="submit">Cadastrar</button>
+  </form>
+
+  <!-- Estoque atual -->
+  <h4>Estoque Atual</h4>
+  <div class="table-wrapper">
+    <table id="tabelaEstoque">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Quantidade</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for i in itens %}
+          <tr>
+            <td>{{ i.nome }}</td>
+            <td>{{ i.quantidade }}</td>
+            <td>
+              <button onclick="alterarQuantidade({{ i.id }}, 'aumentar')">+</button>
+              <button onclick="alterarQuantidade({{ i.id }}, 'reduzir')">-</button>
+              <button onclick="excluirItem({{ i.id }})">Excluir</button>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Log de alterações -->
+  <h4>Histórico de Alterações</h4>
+  <div class="table-wrapper">
+    <table id="tabelaLog">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Ação</th>
+          <th>Quantidade</th>
+          <th>Data/Hora</th>
+          <th>Excluir</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for l in log %}
+          <tr>
+            <td>{{ l.nome }}</td>
+            <td>{{ l.acao }}</td>
+            <td>{{ l.quantidade }}</td>
+            <td>{{ l.data_hora }}</td>
+            <td><button onclick="excluirLog({{ l.id }})">🗑</button></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  // Cadastro
+  document.getElementById("formLimpeza").addEventListener("submit", async function(e){
+    e.preventDefault();
+    let nome = this.nome.value;
+    let quantidade = parseInt(this.quantidade.value);
+
+    const res = await fetch("/cadastrar_item_limpeza", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({nome, quantidade})
+    });
+
+    const data = await res.json();
+    if(data.success) location.reload();
+    else alert("Erro ao cadastrar produto!");
+  });
+});
+
+// Alterar quantidade
+async function alterarQuantidade(id, acao) {
+  let valor = prompt(`Digite a quantidade para ${acao}:`);
+  if (!valor || isNaN(valor)) return alert("Valor inválido");
+
+  const res = await fetch("/alterar_estoque_limpeza", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({id, acao, quantidade: parseInt(valor)})
+  });
+  const data = await res.json();
+  if (data.success) location.reload();
+}
+
+// Excluir item
+async function excluirItem(id) {
+  if (!confirm("Deseja realmente excluir este item?")) return;
+  const res = await fetch("/excluir_item_limpeza", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({id})
+  });
+  const data = await res.json();
+  if (data.success) location.reload();
+}
+
+// Excluir log
+async function excluirLog(id) {
+  const senha = prompt("Digite a senha para excluir o log:");
+  const res = await fetch("/excluir_log_limpeza", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({id, senha})
+  });
+  const data = await res.json();
+  if (data.success) location.reload();
+  else alert(data.message);
+}
+</script>
+{% endblock %}

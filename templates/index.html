@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{% block title %}Dashboard{% endblock %}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <div class="app" id="app">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-card">
+        <div class="section">
+          <h6 class="section-title">Hóspedes</h6>
+          <ul class="menu" id="hospedes">
+            <a href="{{ url_for('lar_alcina') }}">
+            <li class="menu-item {% if request.endpoint == 'lar_alcina' %}active{% endif %}">Lar Alcina</li>
+            </a>
+            <a href="{{ url_for('lar_idosos') }}">
+            <li class="menu-item {% if request.endpoint == 'lar_idosos' %}active{% endif %}">Lar de Idosos</li>
+            </a>
+
+          </ul>
+        </div>
+
+        <div class="section"> 
+          <h6 class="section-title">Controle de Estoque</h6>
+          <div class="custom-select">
+             <a href="{{ url_for('estoque_fraldas') }}"><li class="menu-item">Fraldas</li></a>
+            <a href="{{ url_for('estoque_higiene') }}"><li class="menu-item">Produtos de Higiene</li></a>
+            <a href="{{ url_for('estoque_remedios') }}"><li class="menu-item">Remédios Diários</li></a>
+            <a href="{{ url_for('estoque_escritorio') }}"><li class="menu-item">Itens de Escritório</li></a>
+            <a href="{{ url_for('estoque_limpeza') }}"><li class="menu-item">Produtos de Limpeza</li></a>
+            <a href="{{ url_for('estoque_descartaveis') }}"><li class="menu-item">Descartáveis</li></a>
+            <a href="{{ url_for('estoque_aparelhos') }}"><li class="menu-item">Aparelhos Permanentes</li></a>
+            <a href="{{ url_for('estoque_recreacao') }}"><li class="menu-item">Recreação</li></a>
+            <a href="{{ url_for('estoque_epi') }}"><li class="menu-item">EPI</li></a>
+            <a href="{{ url_for('estoque_folhas') }}"><li class="menu-item">Folhas</li></a>
+            <a href="{{ url_for('estoque_rouparia') }}"><li class="menu-item">Rouparia</li></a>
+          </div>
+        </div> 
+
+        <div class="section">
+          <h6 class="section-title">Setores</h6>
+          <ul class="menu" id="setores">
+            
+            <a href="{{ url_for('nutricao') }}"><li class="menu-item">Nutrição</li></a>
+
+          </ul>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CONTEÚDO VARIÁVEL -->
+    <main class="content">
+      {% block content %}
+      {% endblock %}
+    </main>
+  </div>
+
+  <!-- Tela de Loading -->
+<!-- Tela de Loading -->
+<div id="loadingOverlay">
+  <div class="spinner"></div>
+  <p>Desenvolvido por <strong>NexusOne</strong><br>Desenvolvedores de Softwares e Websites</p>
+</div>
+
+
+<script>
+  // Função para exibir o loading
+  function showLoading() {
+    const overlay = document.getElementById('loadingOverlay');
+    overlay.style.display = 'flex';
+    overlay.style.opacity = '1';
+  }
+
+  // Esconde o loading quando a página terminar de carregar
+  window.addEventListener('load', () => {
+    const overlay = document.getElementById('loadingOverlay');
+    overlay.style.opacity = '0';
+    setTimeout(() => overlay.style.display = 'none', 300);
+  });
+
+  // Mostra o loading ao clicar em qualquer link interno
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', e => {
+        const href = link.getAttribute('href');
+        // Ignora âncoras e links externos
+        if (href && !href.startsWith('#') && !href.startsWith('javascript') && !href.startsWith('mailto')) {
+          showLoading();
+        }
+      });
+    });
+  });
+</script>
+
+
+  <script src="/static/js/script.js"></script>
+
+
+</body>
+</html>

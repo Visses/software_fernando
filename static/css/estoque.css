@@ -1,0 +1,109 @@
+/* ===== Estilo Global para Estoques ===== */
+.controle-estoque {
+  max-width: 1000px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f5e9ed;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  font-family: 'Inter', sans-serif;
+  text-transform: uppercase;
+}
+
+.controle-estoque h3,
+.controle-estoque h4 {
+  color: #720f29;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.controle-estoque table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 25px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.controle-estoque table thead {
+  background: linear-gradient(to right, #89ba90);
+}
+
+.controle-estoque table thead th {
+  color: #fff;
+  text-align: left;
+  padding: 10px 15px;
+  font-weight: 600;
+}
+
+.controle-estoque table tbody td {
+  padding: 10px 15px;
+  border-bottom: 1px solid #e0e0e0;
+  color: #333;
+}
+
+.controle-estoque table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.controle-estoque button {
+  padding: 5px 10px;
+  margin-right: 5px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.controle-estoque button:hover {
+  opacity: 0.85;
+}
+
+/* Botões diferentes */
+.controle-estoque button:nth-child(1) { background-color: #16752e; color: #fff; } /* Aumentar */
+.controle-estoque button:nth-child(2) { background-color: #ff0000; color: #fff; } /* Reduzir */
+.controle-estoque button:nth-child(3) { background-color: #888; color: #fff; } /* Excluir */
+
+/* Formulário de cadastro */
+.controle-estoque form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.controle-estoque form input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.controle-estoque form button {
+  background-color: #89ba90;
+  color: #fff;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .controle-estoque form {
+    flex-direction: column;
+  }
+  .controle-estoque table thead {
+    display: none;
+  }
+  .controle-estoque table tbody td {
+    display: block;
+    width: 100%;
+    padding: 10px 0;
+  }
+  .controle-estoque table tbody tr {
+    margin-bottom: 15px;
+    display: block;
+    border-bottom: 1px solid #e0e0e0;
+  }
+}

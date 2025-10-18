@@ -1,0 +1,180 @@
+{% extends "index.html" %}
+
+{% block title %}
+  Lar Alcina - Dashboard
+{% endblock %}
+
+{% block content %}
+<div class="container-dashboard">
+
+  <!-- COLUNA ESQUERDA -->
+  <div class="coluna-esquerda">
+
+    <!-- CONTADORES -->
+    <div class="contadores">
+      <div class="card-contador normal">Normal: {{ contagem.normal }}</div>
+      <div class="card-contador acamado">Acamado: {{ contagem.acamado }}</div>
+      <div class="card-contador especial">Sonda: {{ contagem.especial }}</div>
+      <div class="card-contador total">Total: {{ contagem.total }}</div>
+    </div>
+
+    <!-- TÍTULO -->
+    <h1 class="titulo-hospedes">LAR ALCINA - HÓSPEDES</h1>
+
+    <!-- BUSCA -->
+    <div class="busca-hospede">
+      <input type="text" id="buscaInput" placeholder=" Buscar hóspede por nome..." onkeyup="filtrarHospedes()">
+    </div>
+
+    <!-- TABELA COM SCROLL -->
+    <div class="tabela-container">
+      <div class="table-wrapper-lar">
+      <table class="tabela-hospedes">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Condição</th>
+            <th>Data Ingresso</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for hospede in hospedes %}
+          <tr>
+            <td>{{ hospede['nome'] }}</td>
+            <td>{{ hospede['condicao'] }}</td>
+            <td>{{ hospede['data_ingresso'] }}</td>
+            <td>
+              <a href="{{ url_for('ver_ficha_alcina', hospede_id=hospede['id']) }}" class="btn-ficha">Ver Ficha</a>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FORMULÁRIO DIREITA -->
+  <div class="form-direita">
+    <h2>Cadastrar Hóspede</h2>
+    <form action="{{ url_for('cadastrar_hospede') }}" method="POST">
+      <label>Nome Completo:</label>
+      <input type="text" name="nome" required>
+
+      <label>CPF:</label>
+      <input type="text" name="cpf">
+
+      <label>RG:</label>
+      <input type="text" name="rg">
+
+      <label>Possui filhos?</label>
+      <select name="possui_filhos" id="possui_filhos" onchange="toggleFilhos()">
+        <option value="Não">Não</option>
+        <option value="Sim">Sim</option>
+      </select>
+
+      <div id="quantos_filhos_div" style="display:none;">
+        <label>Quantos filhos?</label>
+        <input type="number" name="quantos_filhos" min="1">
+      </div>
+
+      <label>Possui Bens?</label>
+      <select name="possui_bens">
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+
+      <label>Pais vivos?</label>
+      <select name="pais_vivos">
+        <option value="Sim">Sim</option>
+        <option value="Não">Não</option>
+      </select>
+
+      <label>Estado Civil:</label>
+      <input type="text" name="estado_civil">
+
+      <label>Profissão:</label>
+      <input type="text" name="profissao">
+
+      <label>Nº Cadastro:</label>
+      <input type="text" name="numero_cadastro">
+
+      <label>Data de Ingresso:</label>
+      <input type="date" name="data_ingresso">
+
+      <label>Grau de Dependência:</label>
+      <input type="text" name="grau_dependencia">
+
+      <label>Data de Nascimento:</label>
+      <input type="date" name="nascimento">
+
+      <label>CEP:</label>
+      <input type="text" name="cep">
+
+      <label>Endereço:</label>
+      <input type="text" name="endereco">
+
+      <label>UF:</label>
+      <input type="text" name="uf">
+
+      <label>Tamanho de Fralda:</label>
+      <input type="text" name="tamanho_fralda">
+
+      <label>Referência 1:</label>
+      <input type="text" name="referencia1">
+      <label>Número 1:</label>
+      <input type="text" name="numero1">
+
+      <label>Referência 2:</label>
+      <input type="text" name="referencia2">
+      <label>Número 2:</label>
+      <input type="text" name="numero2">
+
+      <label>Referência 3:</label>
+      <input type="text" name="referencia3">
+      <label>Número 3:</label>
+      <input type="text" name="numero3">
+
+      <label>Diagnóstico:</label>
+      <textarea name="diagnostico"></textarea>
+
+      <label>Histórico do Hóspede:</label>
+      <textarea name="historico"></textarea>
+
+      <label>Condição:</label>
+      <select name="condicao">
+        <option value="normal">Normal</option>
+        <option value="acamado">Acamado</option>
+        <option value="especial">Sonda</option>
+      </select>
+
+      <button type="submit">Cadastrar</button>
+    </form>
+  </div>
+</div>
+
+<script>
+function toggleFilhos() {
+  var select = document.getElementById('possui_filhos');
+  var div = document.getElementById('quantos_filhos_div');
+  div.style.display = (select.value === 'Sim') ? 'block' : 'none';
+}
+
+function filtrarHospedes() {
+  var input = document.getElementById("buscaInput");
+  var filter = input.value.toLowerCase();
+  var table = document.querySelector(".tabela-hospedes tbody");
+  var tr = table.getElementsByTagName("tr");
+
+  for (var i = 0; i < tr.length; i++) {
+    var td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      var txtValue = td.textContent || td.innerText;
+      tr[i].style.display = txtValue.toLowerCase().indexOf(filter) > -1 ? "" : "none";
+    }
+  }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,159 @@
+{% extends "index.html" %}
+
+{% block title %}
+  Estoque Folhas
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="/static/css/estoque.css">
+<div class="controle-estoque">
+  <h3>Controle de Folhas</h3>
+
+  <!-- Média mensal por setor -->
+  <h4>Média Mensal por Setor</h4>
+  <div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>Setor</th>
+        <th>Mês</th>
+        <th>Total Usado</th>
+        <th>Média Mensal</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for m in media_setor %}
+        <tr>
+          <td>{{ m.setor }}</td>
+          <td>{{ m.mes }}</td>
+          <td>{{ m.total_usado }}</td>
+          <td>{{ m.media_mensal }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+
+  <!-- Formulário de cadastro -->
+  <form id="formFolhas">
+    <input type="text" name="nome" placeholder="Nome do Produto" required>
+    <input type="text" name="setor" placeholder="Setor" required>
+    <input type="number" name="quantidade" placeholder="Quantidade" required>
+    <button type="submit">Cadastrar</button>
+  </form>
+
+  <!-- Tabela de estoque -->
+  <div class="table-wrapper">
+  <table id="tabelaEstoque">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Setor</th>
+        <th>Quantidade</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in itens %}
+        <tr>
+          <td>{{ i.nome }}</td>
+          <td>{{ i.setor }}</td>
+          <td>{{ i.quantidade }}</td>
+          <td>
+            <button onclick="alterarQuantidade({{ i.id }}, 'aumentar')">+</button>
+            <button onclick="alterarQuantidade({{ i.id }}, 'reduzir')">-</button>
+            <button onclick="excluirItem({{ i.id }})">Excluir</button>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+
+  <!-- Tabela de log -->
+  <h4>Histórico de Alterações</h4>
+  <div class="table-wrapper">
+  <table id="tabelaLog">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Setor</th>
+        <th>Ação</th>
+        <th>Quantidade</th>
+        <th>Data/Hora</th>
+        <th>Excluir</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for l in log %}
+        <tr>
+          <td>{{ l.nome }}</td>
+          <td>{{ l.setor }}</td>
+          <td>{{ l.acao }}</td>
+          <td>{{ l.quantidade }}</td>
+          <td>{{ l.data_hora }}</td>
+          <td><button onclick="excluirLog({{ l.log_id }})">🗑</button></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+ </div>
+</div>
+ 
+
+<script>
+document.getElementById("formFolhas").addEventListener("submit", async function(e){
+  e.preventDefault();
+  let nome = this.nome.value;
+  let setor = this.setor.value;
+  let quantidade = parseInt(this.quantidade.value);
+
+  const res = await fetch("/cadastrar_folhas", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({nome, setor, quantidade})
+  });
+  const data = await res.json();
+  if(data.success) location.reload();
+});
+
+// Alterar quantidade
+async function alterarQuantidade(id, acao) {
+  let valor = prompt(`Digite a quantidade para ${acao}:`);
+  if(!valor || isNaN(valor)) return alert("Valor inválido");
+
+  const res = await fetch("/alterar_estoque_folhas", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({id, acao, quantidade: parseInt(valor)})
+  });
+  const data = await res.json();
+  if(data.success) location.reload();
+}
+
+// Excluir item
+async function excluirItem(id) {
+  if(!confirm("Deseja realmente excluir este item?")) return;
+  const res = await fetch("/excluir_folhas", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({id})
+  });
+  const data = await res.json();
+  if(data.success) location.reload();
+}
+
+// Excluir log com senha
+async function excluirLog(id) {
+  const senha = prompt("Digite a senha para excluir o log:");
+  const res = await fetch("/excluir_log_folhas", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({id, senha})
+  });
+  const data = await res.json();
+  if(data.success) location.reload();
+  else alert(data.message);
+}
+</script>
+{% endblock %}
