@@ -9,7 +9,7 @@ app = Flask(__name__)
 # 🔹 Configuração da conexão com o MySQL
 conexao = pymysql.connect(
    host='localhost',
-    user='root',
+    user='fernando_user',
     password='Nathan24$',  # use a senha que você criou
     db='lar_management',
     charset='utf8mb4',  # garante compatibilidade com acentuação
@@ -22,7 +22,7 @@ def index():
     return render_template("index.html")
 
 def get_hospedes_count():
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor(pymysql.cursors.DictCursor)
 
     query = """
@@ -50,7 +50,7 @@ def lar_alcina():
     # Pegar lista de hóspedes
     conn = pymysql.connect(
     host='localhost',
-    user='root',
+    user='fernando_user',
     password='Nathan24$',
     database='lar_management',
     cursorclass=pymysql.cursors.DictCursor  # <<< ADICIONA ISSO
@@ -105,7 +105,7 @@ def cadastrar_hospede():
     historico = request.form['historico']
 
     # Conectar ao banco e inserir todos os campos
-    conexao = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conexao = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conexao.cursor()
     query = """
     INSERT INTO lar_alcina (
@@ -134,7 +134,7 @@ def cadastrar_hospede():
 @app.route("/lar_alcina/hospede/<int:hospede_id>")
 def ver_ficha_alcina(hospede_id):
     conn = pymysql.connect(
-        host='localhost', user='root', password='Nathan24$', 
+        host='localhost', user='fernando_user', password='Nathan24$', 
         database='lar_management', cursorclass=pymysql.cursors.DictCursor
     )
     cursor = conn.cursor()
@@ -172,7 +172,7 @@ def editar_hosp_alcina(hospede_id):
 
     conn = pymysql.connect(
         host='localhost',
-        user='root',
+        user='fernando_user',
         password='Nathan24$',
         database='lar_management'
     )
@@ -248,7 +248,7 @@ def editar_hosp_alcina(hospede_id):
 # Excluir hóspede (Lar Alcina)
 @app.route("/lar_alcina/excluir_hospede/<int:hospede_id>", methods=["POST"])
 def excluir_hosp_alcina(hospede_id):
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     cursor.execute("DELETE FROM lar_alcina WHERE id=%s", (hospede_id,))
     conn.commit()
@@ -283,7 +283,7 @@ def excluir_hosp_alcina(hospede_id):
 
 # 🔹 Função para contar hóspedes do Lar dos Idosos
 def get_hospedes_count_idosos():
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor(pymysql.cursors.DictCursor)
 
     query = """
@@ -312,7 +312,7 @@ def lar_idosos():
     # Pegar lista de hóspedes
     conn = pymysql.connect(
         host='localhost',
-        user='root',
+        user='fernando_user',
         password='Nathan24$',
         database='lar_management',
         cursorclass=pymysql.cursors.DictCursor
@@ -362,7 +362,7 @@ def cadastrar_hosp_idosos():
     historico = request.form['historico']
 
     # Inserir no banco lar_idosos
-    conexao = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conexao = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conexao.cursor()
     query = """
     INSERT INTO lar_idosos (
@@ -399,7 +399,7 @@ def allowed_file(filename):
 # Ver ficha hóspede
 @app.route("/lar_idosos/hospede/<int:hospede_id>")
 def ver_ficha_idosos(hospede_id):
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management', cursorclass=pymysql.cursors.DictCursor)
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management', cursorclass=pymysql.cursors.DictCursor)
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM lar_idosos WHERE id=%s", (hospede_id,))
     hospede = cursor.fetchone()
@@ -418,7 +418,7 @@ def editar_hosp_idosos(hospede_id):
     dados = request.form
     foto = request.files.get('uploadFoto')
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
 
     foto_url = None
@@ -465,7 +465,7 @@ def editar_hosp_idosos(hospede_id):
 # Excluir hóspede
 @app.route("/lar_idosos/excluir_hospede/<int:hospede_id>", methods=["POST"])
 def excluir_hosp_idosos(hospede_id):
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     cursor.execute("DELETE FROM lar_idosos WHERE id=%s", (hospede_id,))
     conn.commit()
@@ -484,7 +484,7 @@ def excluir_hosp_idosos(hospede_id):
 @app.route("/estoque_fraldas")
 def estoque_fraldas():
     conn = pymysql.connect(
-        host='localhost', user='root', password='Nathan24$', 
+        host='localhost', user='fernando_user', password='Nathan24$', 
         database='lar_management', cursorclass=pymysql.cursors.DictCursor
     )
     cursor = conn.cursor()
@@ -550,7 +550,7 @@ def cadastrar_fralda():
     marca = dados["marca"]
     quantidade = int(dados["quantidade"])
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     # Inserir na tabela estoque
     cursor.execute("INSERT INTO estoque_fraldas (tamanho, marca, quantidade, criado_em) VALUES (%s,%s,%s,NOW())", (tamanho, marca, quantidade))
@@ -570,7 +570,7 @@ def alterar_estoque_fralda():
     acao = dados["acao"]
     quantidade = int(dados["quantidade"])
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
 
     if acao == "aumentar":
@@ -592,7 +592,7 @@ def excluir_fralda():
     dados = request.get_json()
     fralda_id = dados["id"]
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     cursor.execute("DELETE FROM estoque_fraldas WHERE id=%s", (fralda_id,))
     conn.commit()
@@ -611,7 +611,7 @@ def excluir_log_fralda():
     if senha != "admin123":  # 🔒 senha de segurança
         return jsonify({"success": False, "message": "Senha incorreta"})
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     cursor.execute("DELETE FROM log_fraldas WHERE id=%s", (log_id,))
     conn.commit()
@@ -622,7 +622,7 @@ def excluir_log_fralda():
 
 @app.route("/estoque_alimentos")
 def estoque_alimentos():
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management', cursorclass=pymysql.cursors.DictCursor)
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management', cursorclass=pymysql.cursors.DictCursor)
     cursor = conn.cursor()
 
     cursor.execute("SELECT * FROM estoque_alimentos")
@@ -661,7 +661,7 @@ def cadastrar_alimento():
     marca = dados["marca"]
     quantidade = int(dados["quantidade"])
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     cursor.execute("INSERT INTO estoque_alimentos (nome, marca, quantidade, criado_em) VALUES (%s,%s,%s,NOW())", (nome, marca, quantidade))
     alimento_id = cursor.lastrowid
@@ -679,7 +679,7 @@ def alterar_estoque_alimento():
     acao = dados["acao"]
     quantidade = int(dados["quantidade"])
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     if acao=="aumentar":
         cursor.execute("UPDATE estoque_alimentos SET quantidade = quantidade + %s WHERE id=%s", (quantidade, alimento_id))
@@ -697,7 +697,7 @@ def alterar_estoque_alimento():
 def excluir_alimento():
     dados = request.get_json()
     alimento_id = dados["id"]
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     cursor.execute("DELETE FROM estoque_alimentos WHERE id=%s", (alimento_id,))
     conn.commit()
@@ -715,7 +715,7 @@ def excluir_log_alimento():
     if senha != "admin123":
         return jsonify({"success": False, "message": "Senha incorreta"})
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     cursor.execute("DELETE FROM log_alimentos WHERE id=%s", (log_id,))
     conn.commit()
@@ -728,7 +728,7 @@ def excluir_log_alimento():
 @app.route("/estoque_higiene")
 def estoque_higiene():
     conn = pymysql.connect(
-        host='localhost', user='root', password='Nathan24$', 
+        host='localhost', user='fernando_user', password='Nathan24$', 
         database='lar_management', cursorclass=pymysql.cursors.DictCursor
     )
     cursor = conn.cursor()
@@ -782,7 +782,7 @@ def cadastrar_higiene():
     nome = dados["nome"]
     quantidade = int(dados["quantidade"])
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     
     # Inserir produto
@@ -805,7 +805,7 @@ def alterar_estoque_higiene():
     acao = dados["acao"]
     quantidade = int(dados["quantidade"])
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
 
     if acao == "aumentar":
@@ -826,7 +826,7 @@ def excluir_higiene():
     dados = request.get_json()
     produto_id = dados["id"]
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     cursor.execute("DELETE FROM estoque_higiene WHERE id=%s", (produto_id,))
     conn.commit()
@@ -844,7 +844,7 @@ def excluir_log_higiene():
     if senha != "admin123":
         return jsonify({"success": False, "message": "Senha incorreta"})
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     cursor.execute("DELETE FROM log_higiene WHERE id=%s", (log_id,))
     conn.commit()
@@ -857,7 +857,7 @@ def excluir_log_higiene():
 @app.route("/estoque_remedios")
 def estoque_remedios():
     conn = pymysql.connect(
-        host='localhost', user='root', password='Nathan24$', 
+        host='localhost', user='fernando_user', password='Nathan24$', 
         database='lar_management', cursorclass=pymysql.cursors.DictCursor
     )
     cursor = conn.cursor()
@@ -911,7 +911,7 @@ def cadastrar_remedio():
     nome = dados["nome"]
     quantidade = int(dados["quantidade"])
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     
     # Inserir no estoque
@@ -934,7 +934,7 @@ def alterar_estoque_remedio():
     acao = dados["acao"]
     quantidade = int(dados["quantidade"])
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
 
     if acao == "aumentar":
@@ -955,7 +955,7 @@ def excluir_remedio():
     dados = request.get_json()
     remedio_id = dados["id"]
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     cursor.execute("DELETE FROM estoque_remedios WHERE id=%s", (remedio_id,))
     conn.commit()
@@ -973,7 +973,7 @@ def excluir_log_remedio():
     if senha != "admin123":
         return jsonify({"success": False, "message": "Senha incorreta"})
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     cursor.execute("DELETE FROM log_remedios WHERE id=%s", (log_id,))
     conn.commit()
@@ -991,7 +991,7 @@ def excluir_log_remedio():
 @app.route("/estoque_escritorio")
 def estoque_escritorio():
     conn = pymysql.connect(
-        host='localhost', user='root', password='Nathan24$', 
+        host='localhost', user='fernando_user', password='Nathan24$', 
         database='lar_management', cursorclass=pymysql.cursors.DictCursor
     )
     cursor = conn.cursor()
@@ -1041,7 +1041,7 @@ def cadastrar_item_escritorio():
     nome = dados["nome"]
     quantidade = int(dados["quantidade"])
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     # Inserir na tabela estoque
     cursor.execute(
@@ -1067,7 +1067,7 @@ def alterar_estoque_escritorio():
     acao = dados["acao"]
     quantidade = int(dados["quantidade"])
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
 
     if acao == "aumentar":
@@ -1100,7 +1100,7 @@ def excluir_item_escritorio():
     dados = request.get_json()
     item_id = dados["id"]
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     cursor.execute("DELETE FROM estoque_escritorio WHERE id=%s", (item_id,))
     conn.commit()
@@ -1118,7 +1118,7 @@ def excluir_log_escritorio():
     if senha != "admin123":  # 🔒 senha de segurança
         return jsonify({"success": False, "message": "Senha incorreta"})
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     cursor.execute("DELETE FROM log_escritorio WHERE id=%s", (log_id,))
     conn.commit()
@@ -1133,7 +1133,7 @@ def excluir_log_escritorio():
 @app.route("/estoque_limpeza")
 def estoque_limpeza():
     conn = pymysql.connect(
-        host='localhost', user='root', password='Nathan24$', 
+        host='localhost', user='fernando_user', password='Nathan24$', 
         database='lar_management', cursorclass=pymysql.cursors.DictCursor
     )
     cursor = conn.cursor()
@@ -1183,7 +1183,7 @@ def cadastrar_item_limpeza():
     nome = dados["nome"]
     quantidade = int(dados["quantidade"])
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     cursor.execute(
         "INSERT INTO estoque_limpeza (nome, quantidade, criado_em) VALUES (%s,%s,NOW())",
@@ -1207,7 +1207,7 @@ def alterar_estoque_limpeza():
     acao = dados["acao"]
     quantidade = int(dados["quantidade"])
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
 
     if acao == "aumentar":
@@ -1240,7 +1240,7 @@ def excluir_item_limpeza():
     dados = request.get_json()
     item_id = dados["id"]
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     cursor.execute("DELETE FROM estoque_limpeza WHERE id=%s", (item_id,))
     conn.commit()
@@ -1258,7 +1258,7 @@ def excluir_log_limpeza():
     if senha != "admin123":
         return jsonify({"success": False, "message": "Senha incorreta"})
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     cursor.execute("DELETE FROM log_limpeza WHERE id=%s", (log_id,))
     conn.commit()
@@ -1273,7 +1273,7 @@ def excluir_log_limpeza():
 @app.route("/estoque_descartaveis")
 def estoque_descartaveis():
     conn = pymysql.connect(
-        host='localhost', user='root', password='Nathan24$', 
+        host='localhost', user='fernando_user', password='Nathan24$', 
         database='lar_management', cursorclass=pymysql.cursors.DictCursor
     )
     cursor = conn.cursor()
@@ -1323,7 +1323,7 @@ def cadastrar_item_descartaveis():
     nome = dados["nome"]
     quantidade = int(dados["quantidade"])
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     cursor.execute(
         "INSERT INTO estoque_descartaveis (nome, quantidade, criado_em) VALUES (%s,%s,NOW())",
@@ -1347,7 +1347,7 @@ def alterar_estoque_descartaveis():
     acao = dados["acao"]
     quantidade = int(dados["quantidade"])
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
 
     if acao == "aumentar":
@@ -1380,7 +1380,7 @@ def excluir_item_descartaveis():
     dados = request.get_json()
     item_id = dados["id"]
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     cursor.execute("DELETE FROM estoque_descartaveis WHERE id=%s", (item_id,))
     conn.commit()
@@ -1398,7 +1398,7 @@ def excluir_log_descartaveis():
     if senha != "admin123":
         return jsonify({"success": False, "message": "Senha incorreta"})
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     cursor.execute("DELETE FROM log_descartaveis WHERE id=%s", (log_id,))
     conn.commit()
@@ -1413,7 +1413,7 @@ def excluir_log_descartaveis():
 @app.route("/estoque_aparelhos")
 def estoque_aparelhos():
     conn = pymysql.connect(
-        host='localhost', user='root', password='Nathan24$', 
+        host='localhost', user='fernando_user', password='Nathan24$', 
         database='lar_management', cursorclass=pymysql.cursors.DictCursor
     )
     cursor = conn.cursor()
@@ -1443,7 +1443,7 @@ def cadastrar_aparelho():
     nome = dados["nome"]
     quantidade = int(dados["quantidade"])
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
 
     # Inserir no estoque
@@ -1472,7 +1472,7 @@ def alterar_estoque_aparelho():
     acao = dados["acao"]
     quantidade = int(dados["quantidade"])
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
 
     if acao == "aumentar":
@@ -1505,7 +1505,7 @@ def excluir_aparelho():
     dados = request.get_json()
     aparelho_id = dados["id"]
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
 
     # Excluir do estoque (log permanece ou pode excluir com CASCADE)
@@ -1525,7 +1525,7 @@ def excluir_log_aparelhos():
         return jsonify({"success": False, "message": "Senha incorreta"})
 
     conn = pymysql.connect(
-        host='localhost', user='root', password='Nathan24$', database='lar_management'
+        host='localhost', user='fernando_user', password='Nathan24$', database='lar_management'
     )
     cursor = conn.cursor()
     cursor.execute("DELETE FROM log_aparelhos WHERE id=%s", (log_id,))
@@ -1542,7 +1542,7 @@ def excluir_log_aparelhos():
 @app.route("/estoque_recreacao")
 def estoque_recreacao():
     conn = pymysql.connect(
-        host='localhost', user='root', password='Nathan24$', 
+        host='localhost', user='fernando_user', password='Nathan24$', 
         database='lar_management', cursorclass=pymysql.cursors.DictCursor
     )
     cursor = conn.cursor()
@@ -1572,7 +1572,7 @@ def cadastrar_recreacao():
     nome = dados["nome"]
     quantidade = int(dados["quantidade"])
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
 
     # Inserir no estoque
@@ -1601,7 +1601,7 @@ def alterar_estoque_recreacao():
     acao = dados["acao"]
     quantidade = int(dados["quantidade"])
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
 
     if acao == "aumentar":
@@ -1634,7 +1634,7 @@ def excluir_recreacao():
     dados = request.get_json()
     item_id = dados["id"]
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
 
     cursor.execute("DELETE FROM estoque_recreacao WHERE id=%s", (item_id,))
@@ -1649,7 +1649,7 @@ def excluir_recreacao():
 @app.route("/estoque_epi")
 def estoque_epi():
     conn = pymysql.connect(
-        host='localhost', user='root', password='Nathan24$', 
+        host='localhost', user='fernando_user', password='Nathan24$', 
         database='lar_management', cursorclass=pymysql.cursors.DictCursor
     )
     cursor = conn.cursor()
@@ -1680,7 +1680,7 @@ def cadastrar_epi():
     tamanho = dados.get("tamanho", "")
     quantidade = int(dados["quantidade"])
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
 
     # Inserir no estoque
@@ -1709,7 +1709,7 @@ def alterar_estoque_epi():
     acao = dados["acao"]
     quantidade = int(dados["quantidade"])
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
 
     if acao == "aumentar":
@@ -1742,7 +1742,7 @@ def excluir_epi():
     dados = request.get_json()
     item_id = dados["id"]
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
 
     cursor.execute("DELETE FROM estoque_epi WHERE id=%s", (item_id,))
@@ -1760,7 +1760,7 @@ def excluir_log_epi():
     if senha != "admin123":
         return jsonify({"success": False, "message": "Senha incorreta"})
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     cursor.execute("DELETE FROM log_epi WHERE id=%s", (log_id,))
     conn.commit()
@@ -1778,7 +1778,7 @@ def excluir_log_recreacao():
         return jsonify({"success": False, "message": "Senha incorreta"})
 
     conn = pymysql.connect(
-        host='localhost', user='root', password='Nathan24$', database='lar_management'
+        host='localhost', user='fernando_user', password='Nathan24$', database='lar_management'
     )
     cursor = conn.cursor()
     cursor.execute("DELETE FROM log_recreacao WHERE id=%s", (log_id,))
@@ -1793,7 +1793,7 @@ def excluir_log_recreacao():
 @app.route("/estoque_folhas")
 def estoque_folhas():
     conn = pymysql.connect(
-        host='localhost', user='root', password='Nathan24$', 
+        host='localhost', user='fernando_user', password='Nathan24$', 
         database='lar_management', cursorclass=pymysql.cursors.DictCursor
     )
     cursor = conn.cursor()
@@ -1848,7 +1848,7 @@ def cadastrar_folhas():
     setor = dados["setor"]
     quantidade = int(dados["quantidade"])
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     cursor.execute("INSERT INTO estoque_folhas (nome,setor,quantidade,criado_em) VALUES (%s,%s,%s,NOW())", (nome, setor, quantidade))
     item_id = cursor.lastrowid
@@ -1866,7 +1866,7 @@ def alterar_estoque_folhas():
     acao = dados["acao"]
     quantidade = int(dados["quantidade"])
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
 
     if acao == "aumentar":
@@ -1887,7 +1887,7 @@ def excluir_folhas():
     dados = request.get_json()
     item_id = dados["id"]
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     cursor.execute("DELETE FROM estoque_folhas WHERE id=%s", (item_id,))
     conn.commit()
@@ -1905,7 +1905,7 @@ def excluir_log_folhas():
     if senha != "admin123":
         return jsonify({"success": False, "message": "Senha incorreta"})
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     cursor.execute("DELETE FROM log_folhas WHERE id=%s", (log_id,))
     conn.commit()
@@ -1916,7 +1916,7 @@ def excluir_log_folhas():
 # Estoque Rouparia
 @app.route("/estoque_rouparia")
 def estoque_rouparia():
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management', cursorclass=pymysql.cursors.DictCursor)
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management', cursorclass=pymysql.cursors.DictCursor)
     cursor = conn.cursor()
 
     # Estoque atual
@@ -1951,7 +1951,7 @@ def cadastrar_rouparia():
     nome = dados["nome"]
     quantidade = dados["quantidade"]
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     cursor.execute("INSERT INTO estoque_rouparia (nome, quantidade) VALUES (%s,%s)", (nome, quantidade))
     rouparia_id = cursor.lastrowid
@@ -1969,7 +1969,7 @@ def alterar_estoque_rouparia():
     acao = dados["acao"]
     quantidade = dados["quantidade"]
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
 
     if acao == "aumentar":
@@ -1990,7 +1990,7 @@ def excluir_rouparia():
 
     conn = pymysql.connect(
         host='localhost',
-        user='root',
+        user='fernando_user',
         password='Nathan24$',
         database='lar_management'
     )
@@ -2024,7 +2024,7 @@ def excluir_log_rouparia():
     if senha != "admin123":
         return jsonify({"success": False, "message": "Senha incorreta"})
 
-    conn = pymysql.connect(host='localhost', user='root', password='Nathan24$', database='lar_management')
+    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
     cursor = conn.cursor()
     cursor.execute("DELETE FROM log_rouparia WHERE id=%s", (log_id,))
     conn.commit()
