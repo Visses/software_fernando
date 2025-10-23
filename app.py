@@ -828,20 +828,55 @@ def alterar_estoque_higiene():
     acao = dados["acao"]
     quantidade = int(dados["quantidade"])
 
-    conn = pymysql.connect(host='localhost', user='fernando_user', password='Nathan24$', database='lar_management')
-    cursor = conn.cursor()
+    try:
+        conn = pymysql.connect(
+            host='localhost',
+            user='fernando_user',
+            password='Nathan24$',
+            database='lar_management',
+            connect_timeout=5,         # evita travamento se o banco demorar
+            read_timeout=10,
+            write_timeout=10,
+            autocommit=False           # garante controle manual de transação
+        )
+        cursor = conn.cursor()
 
-    if acao == "aumentar":
-        cursor.execute("UPDATE estoque_higiene SET quantidade = quantidade + %s WHERE id=%s", (quantidade, produto_id))
-        cursor.execute("INSERT INTO log_higiene (produto_id, acao, quantidade, data_hora) VALUES (%s,'aumento',%s,NOW())", (produto_id, quantidade))
-    elif acao == "reduzir":
-        cursor.execute("UPDATE estoque_higiene SET quantidade = GREATEST(quantidade - %s, 0) WHERE id=%s", (quantidade, produto_id))
-        cursor.execute("INSERT INTO log_higiene (produto_id, acao, quantidade, data_hora) VALUES (%s,'redução',%s,NOW())", (produto_id, quantidade))
+        if acao == "aumentar":
+            cursor.execute(
+                "UPDATE estoque_higiene SET quantidade = quantidade + %s WHERE id=%s",
+                (quantidade, produto_id)
+            )
+            cursor.execute(
+                "INSERT INTO log_higiene (produto_id, acao, quantidade, data_hora) VALUES (%s,'aumento',%s,NOW())",
+                (produto_id, quantidade)
+            )
 
-    conn.commit()
-    cursor.close()
-    conn.close()
-    return jsonify({"success": True})
+        elif acao == "reduzir":
+            cursor.execute(
+                "UPDATE estoque_higiene SET quantidade = GREATEST(quantidade - %s, 0) WHERE id=%s",
+                (quantidade, produto_id)
+            )
+            cursor.execute(
+                "INSERT INTO log_higiene (produto_id, acao, quantidade, data_hora) VALUES (%s,'redução',%s,NOW())",
+                (produto_id, quantidade)
+            )
+
+        conn.commit()
+        return jsonify({"success": True})
+
+    except pymysql.MySQLError as e:
+        # rollback para liberar locks e evitar travamentos
+        if conn:
+            conn.rollback()
+        print("Erro MySQL:", e)
+        return jsonify({"error": str(e)}), 500
+
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+
 
 
 @app.route("/excluir_higiene", methods=["POST"])
