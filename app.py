@@ -6,6 +6,7 @@ from flask import Flask, render_template, request, jsonify
 from flask import Flask, request, session, redirect, url_for, render_template_string
 
 app = Flask(__name__)
+app.secret_key = "chave_segura_qualquer"
 SENHA_CORRETA = '157823'
 
 # 🔹 Configuração da conexão com o MySQL
