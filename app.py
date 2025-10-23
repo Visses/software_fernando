@@ -3,8 +3,10 @@ import pymysql
 import os
 from werkzeug.utils import secure_filename
 from flask import Flask, render_template, request, jsonify
+from flask import Flask, request, session, redirect, url_for, render_template_string
 
 app = Flask(__name__)
+SENHA_CORRETA = '157823'
 
 # 🔹 Configuração da conexão com o MySQL
 conexao = pymysql.connect(
@@ -16,6 +18,27 @@ conexao = pymysql.connect(
     cursorclass=pymysql.cursors.DictCursor
 )
 
+
+@app.before_request
+def proteger_com_senha():
+    if request.endpoint == 'login' or session.get('autenticado'):
+        return
+    return redirect(url_for('login'))
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        if request.form.get('senha') == SENHA_CORRETA:
+            session['autenticado'] = True
+            return redirect(url_for('index'))
+        return render_template_string('<h3>Senha incorreta</h3><a href="/login">Tentar novamente</a>')
+    return render_template_string('''
+        <form method="POST" style="margin-top: 20vh; text-align:center;">
+            <h2>Digite a senha de acesso</h2>
+            <input type="password" name="senha" autofocus required>
+            <button type="submit">Entrar</button>
+        </form>
+    ''')
 # 🔹 Rota inicial (home)
 @app.route("/")
 def index():
